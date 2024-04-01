@@ -1,0 +1,12 @@
+﻿@using Highsoft.Web.Mvc.Charts
+@using Highsoft.Web.Mvc.Charts.Rendering
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+@{
+    ViewData["Title"] = "Chart";
+    var chartOptions = ViewData["chartOptions"] as Highcharts;
+    var renderer = new HighchartsRenderer(chartOptions);
+}
+@Html.Raw(renderer.RenderHtml())
