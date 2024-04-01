@@ -30,10 +30,10 @@ public class HomeController : Controller
             using var httpClient = new HttpClient();
             var response = await httpClient.GetAsync(queryUri);
             var jsonStream = await response.Content.ReadAsStreamAsync();
-            var data = (await JsonSerializer.DeserializeAsync<Dictionary<string, JsonObject>>(jsonStream))![seriesName];
+            var data = (await JsonSerializer.DeserializeAsync<Dictionary<string, JsonObject>>(jsonStream))![seriesName].Reverse().ToList();
             var chartData = seriesValueName.ToDictionary(x => x, x => new List<ColumnSeriesData>());
             var categories = new List<string>();
-            data.ToList().ForEach(d =>
+            data.ForEach(d =>
             {
                 categories.Add(d.Key);
                 seriesValueName.ForEach(x => chartData[x].Add(new() { Y = double.Parse(d.Value[x].GetValue<string>()) }));
@@ -49,7 +49,7 @@ public class HomeController : Controller
                 Tooltip = new Tooltip
                 {
                     HeaderFormat = "<span style='font-size:10px'>{point.key}</span><table style='font-size:12px'>",
-                    PointFormat = "<tr><td style='color:{series.color};padding:0'>{series.name}: </td><td style='padding:0'><b>{point.y:.1f} mm</b></td></tr>",
+                    PointFormat = "<tr><td style='color:{series.color};padding:0'>{series.name}: </td><td style='padding:0'><b>{point.y:.1f} USD</b></td></tr>",
                     FooterFormat = "</table>",
                     Shared = true,
                     UseHTML = true
